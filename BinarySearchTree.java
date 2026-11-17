@@ -213,6 +213,72 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     public void remove (T element)
     {
         //TODO
+        BinaryNode<T> curNode = root;
+        BinaryNode<T> parentNode = curNode;
+        while(curNode!=null)
+        {
+            
+            if(curNode.getInfo().compareTo(element)<0)
+            {
+                parentNode = curNode;
+                curNode = curNode.getRight();
+            }
+            else if(curNode.getInfo().equals(element))
+            {
+                break;
+            }
+            else
+            {
+                parentNode = curNode;
+                curNode = curNode.getLeft();
+            }
+        }
+        if(curNode==null)
+            //node not found
+            return;
+        else if(parentNode==curNode)
+            //size==1
+            root = null;
+        else
+        {
+            //node found, remove it
+
+            //node has no links
+            if(curNode.getLeft()==null&&curNode.getRight()==null)
+            {
+                if(parentNode.getInfo().compareTo(curNode.getInfo())<=0)
+                {
+                    parentNode.setRight(null);
+                }
+                else
+                {
+                    parentNode.setLeft(null);
+                }
+            }
+            //node has one link
+            else if((curNode.getLeft()==null&&curNode.getRight()!=null)||(curNode.getLeft()!=null&&curNode.getRight()==null))
+            {
+                if(parentNode.getInfo().compareTo(curNode.getInfo())<=0)
+                {
+                    if(curNode.getLeft()!=null)
+                        parentNode.setRight(curNode.getLeft());
+                    else
+                        parentNode.setRight(curNode.getRight());
+                }
+                else
+                {
+                     if(curNode.getLeft()!=null)
+                        parentNode.setLeft(curNode.getLeft());
+                    else
+                        parentNode.setLeft(curNode.getRight());
+                }
+            }
+            //node has two links, hardest case
+            else
+            {
+                BinaryNode<T> removeNode = curNode;
+            }
+        }
     }
 
     // Restructures this BST to be optimally balanced
@@ -221,6 +287,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
         //TODO
     }
 
+    //OPTIONAL METHOD
     public void setRoot(BinaryNode<T> newRoot)
     {
         root = newRoot;
