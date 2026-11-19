@@ -138,13 +138,19 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
         BinarySearchTree<T> rightTree = new BinarySearchTree<>();
         rightTree.setRoot(root.getRight());
         List<T> right = rightTree.preorderTraverse();
-        for(int i = 0; i < left.size(); i++)
+        if(left!=null)
         {
-            list.add(left.get(i));
+            for(int i = 0; i < left.size(); i++)
+            {
+                list.add(left.get(i));
+            }
         }
-        for(int i = 0; i < right.size(); i++)
+        if(right!=null)
         {
-            list.add(right.get(i));
+            for(int i = 0; i < right.size(); i++)
+            {
+                list.add(right.get(i));
+            }
         }
         return list;
     }
@@ -167,14 +173,20 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
         BinarySearchTree<T> rightTree = new BinarySearchTree<>();
         rightTree.setRoot(root.getRight());
         List<T> right = rightTree.inorderTraverse();
-        for(int i = 0; i < left.size(); i++)
+        if(left!=null)
         {
-            list.add(left.get(i));
+            for(int i = 0; i < left.size(); i++)
+            {
+                list.add(left.get(i));
+            }
         }
         list.add(root.getInfo());
-        for(int i = 0; i < right.size(); i++)
+        if(right!=null)
         {
-            list.add(right.get(i));
+            for(int i = 0; i < right.size(); i++)
+            {
+                list.add(right.get(i));
+            }
         }
         return list;
     }
@@ -197,13 +209,19 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
         BinarySearchTree<T> rightTree = new BinarySearchTree<>();
         rightTree.setRoot(root.getRight());
         List<T> right = rightTree.postorderTraverse();
-        for(int i = 0; i < left.size(); i++)
+        if(left!=null)
         {
-            list.add(left.get(i));
+            for(int i = 0; i < left.size(); i++)
+            {
+                list.add(left.get(i));
+            }
         }
-        for(int i = 0; i < right.size(); i++)
+        if(right!=null)
         {
-            list.add(right.get(i));
+            for(int i = 0; i < right.size(); i++)
+            {
+                list.add(right.get(i));
+            }
         }
         list.add(root.getInfo());
         return list;
@@ -212,9 +230,33 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Removes an element e from this BST such that e.compareTo(element) == 0
     public void remove (T element)
     {
-        //TODO
         BinaryNode<T> curNode = root;
         BinaryNode<T> parentNode = curNode;
+        if(root.getInfo().equals(element))
+        {
+            if(root.getLeft()==null)
+            {
+                root = root.getRight();
+                return;
+            }
+            else if(root.getRight()==null)
+            {
+                root = root.getLeft();
+                return;
+            }
+            else
+            {
+                curNode = curNode.getLeft();
+                while(curNode.getRight()!=null)
+                {
+                    parentNode = curNode;
+                    curNode = curNode.getRight();
+                }
+                parentNode.setRight(curNode.getLeft());
+                root.setInfo(curNode.getInfo());
+                return;
+            }
+        }
         while(curNode!=null)
         {
             
@@ -277,6 +319,14 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
             else
             {
                 BinaryNode<T> removeNode = curNode;
+                curNode = curNode.getLeft();
+                while(curNode.getRight()!=null)
+                {
+                    parentNode = curNode;
+                    curNode = curNode.getRight();
+                }
+                removeNode.setInfo(curNode.getInfo());
+                parentNode.setRight(curNode.getLeft());
             }
         }
     }
@@ -284,7 +334,13 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Restructures this BST to be optimally balanced
     public void balance()
     {
-        //TODO
+        if(root==null)
+            return;
+        else if(root.getLeft()==null&&root.getRight()==null)
+            return;
+        List<T> tree = inorderTraverse();
+        root = new BinaryNode<T>(tree.get( (int) (tree.size()/2) ));
+
     }
 
     //OPTIONAL METHOD
