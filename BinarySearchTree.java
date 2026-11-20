@@ -340,8 +340,45 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
             return;
         List<T> tree = inorderTraverse();
         root = new BinaryNode<T>(tree.get( (int) (tree.size()/2) ));
-
+        List<T> leftList = new ArrayList<>();
+        for(int i = 0; i < ((int) (tree.size()/2)); i++)
+        {
+            leftList.add(tree.get(i));
+        }
+        List<T> rightList = new ArrayList<>();
+        for(int i = ((int) (tree.size()/2))+1; i < tree.size(); i++)
+        {
+            rightList.add(tree.get(i));
+        }
+        root.setLeft(balanceHelper(leftList));
+        root.setRight(balanceHelper(rightList));
     }
+
+    private BinaryNode<T> balanceHelper(List<T> values)
+    {
+        if(values.isEmpty())
+            return null;
+        if(values.size()==1)
+            return new BinaryNode<T>(values.get(0));
+        List<T> leftList = new ArrayList<>();
+        for(int i = 0; i < ((int) (values.size()/2)); i++)
+        {
+            leftList.add(values.get(i));
+        }
+        List<T> rightList = new ArrayList<>();
+        for(int i = ((int) (values.size()/2))+1; i < values.size(); i++)
+        {
+            rightList.add(values.get(i));
+        }
+        BinaryNode<T> node = new BinaryNode<T>(values.get( (int) (values.size()/2) ));
+        node.setLeft(balanceHelper(leftList));
+        node.setRight(balanceHelper(rightList));
+        return node;
+    }
+
+
+
+
 
     //OPTIONAL METHOD
     public void setRoot(BinaryNode<T> newRoot)
